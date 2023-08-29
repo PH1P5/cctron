@@ -1,0 +1,9 @@
+[
+  {
+    "url": "https://your-ci-cd.service/feed-location"
+  },
+  {
+    "url": "https://your-ci-cd.service/feed-location",
+    "authRequired": true
+  }
+]
