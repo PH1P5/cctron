@@ -1,4 +1,4 @@
-import { app, shell } from "electron";
+import { app, shell, Notification, clipboard } from "electron";
 import * as path from "path";
 import * as fs from 'fs';
 import MenuItemConstructorOptions = Electron.MenuItemConstructorOptions;
@@ -20,11 +20,27 @@ interface ConfigEntry {
 }
 
 export const initMenuItems = async (): Promise<Array<CCTronMenuItem | MenuItemConstructorOptions>> => {
-    const configEntries: ConfigEntry[] = JSON.parse(fs.readFileSync('config.json').toString());
+    const configFile = await loadConfigFile();
+    const configEntries: ConfigEntry[] = JSON.parse(configFile.toString());
     const unresolvedResponses: Promise<CCResponse>[] = configEntries.map(configEntry => fetchStatus(configEntry));
     const responses: CCResponse[] = (await Promise.all(unresolvedResponses)).filter(res => res !== undefined);
 
-    return [...toCCTronMenuItem(responses), ...nonDynamicMenuItems()];
+    return [...toCCTronMenuItem(responses), ...staticMenuItems()];
+}
+
+const loadConfigFile = async (): Promise<Buffer> => {
+    const targetConfigFilePath = app.getPath('userData') + '/config.json';
+    const defaultConfigFilePath = path.join(__dirname, 'config.json');
+
+    try {
+        return await fs.promises.readFile(targetConfigFilePath);
+    } catch {
+        console.log('No config file found, initialisation follows.');
+    }
+
+    await fs.promises.copyFile(defaultConfigFilePath, targetConfigFilePath);
+
+    return await fs.promises.readFile(targetConfigFilePath);
 }
 
 const toCCTronMenuItem = (responses: CCResponse[]): Array<CCTronMenuItem> => {
@@ -46,14 +62,30 @@ const toCCTronMenuItem = (responses: CCResponse[]): Array<CCTronMenuItem> => {
     );
 }
 
-const nonDynamicMenuItems = (): Array<MenuItemConstructorOptions> => {
+const staticMenuItems = (): Array<MenuItemConstructorOptions> => {
     return [
         {
             label: '',
             type: 'separator'
         },
         {
-            label: 'Quit', type: 'normal', click: (menuItem, browserWindow, keyBoardEvent) => {
+            label: 'Get Config Path',
+            toolTip: 'Find config here: ' + app.getPath('userData'),
+            type: 'normal', click: (menuItem, browserWindow, keyBoardEvent) => {
+                clipboard.writeText(app.getPath('userData')+'/' + 'config.json')
+                new Notification({
+                    title: "Config Path",
+                    body: "Copied config path to clipboard."
+                }).show()
+            }
+        },
+        {
+            label: '',
+            type: 'separator'
+        },
+        {
+            label: 'Quit',
+            type: 'normal', click: (menuItem, browserWindow, keyBoardEvent) => {
                 app.quit()
             }
         }
