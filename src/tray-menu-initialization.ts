@@ -1,10 +1,11 @@
-import { app, shell, Notification, clipboard } from "electron";
+import {app, shell, Notification, clipboard, safeStorage} from "electron";
 import * as path from "path";
 import * as fs from 'fs';
 import MenuItemConstructorOptions = Electron.MenuItemConstructorOptions;
 
-import { CCResponse, fetchStatus } from "./cc-client";
+import {CCResponse, fetchStatus} from "./cc-client";
 import {BUILDING, STATUS_ICONS} from "./tray-initialization";
+import {setCredentials} from "./user-manager";
 
 interface CCTronMenuItem extends MenuItemConstructorOptions {
     status: string
@@ -24,6 +25,7 @@ export const initMenuItems = async (): Promise<Array<CCTronMenuItem | MenuItemCo
     const configEntries: ConfigEntry[] = JSON.parse(configFile.toString());
     const unresolvedResponses: Promise<CCResponse>[] = configEntries.map(configEntry => fetchStatus(configEntry));
     const responses: CCResponse[] = (await Promise.all(unresolvedResponses)).filter(res => res !== undefined);
+
 
     return [...toCCTronMenuItem(responses), ...staticMenuItems()];
 }
@@ -69,10 +71,10 @@ const staticMenuItems = (): Array<MenuItemConstructorOptions> => {
             type: 'separator'
         },
         {
-            label: 'Get Config Path',
-            toolTip: 'Find config here: ' + app.getPath('userData'),
+            label: 'get config path',
+            toolTip: 'find config here: ' + app.getPath('userData'),
             type: 'normal', click: (menuItem, browserWindow, keyBoardEvent) => {
-                clipboard.writeText(app.getPath('userData')+'/' + 'config.json')
+                clipboard.writeText(app.getPath('userData') + '/' + 'config.json')
                 new Notification({
                     title: "Config Path",
                     body: "Copied config path to clipboard."
@@ -80,11 +82,25 @@ const staticMenuItems = (): Array<MenuItemConstructorOptions> => {
             }
         },
         {
+            label: 'get credentials from clipboard',
+            toolTip: 'use format "username:password"',
+            type: 'normal', click: (menuItem, browserWindow, keyBoardEvent) => {
+                const fromClipboard = clipboard.readText();
+                setCredentials(fromClipboard)
+                    .then(() => {
+                        new Notification({
+                            title: "Credentials stored",
+                            body: "Credentials stored in the system keychain"
+                        }).show()
+                    });
+            }
+        },
+        {
             label: '',
             type: 'separator'
         },
         {
-            label: 'Quit',
+            label: 'quit',
             type: 'normal', click: (menuItem, browserWindow, keyBoardEvent) => {
                 app.quit()
             }

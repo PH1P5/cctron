@@ -1,6 +1,7 @@
 import { XMLParser } from "fast-xml-parser";
 
 import {ConfigProps, LOCKED, UNKNOWN} from "./tray-initialization";
+import {getCredentials} from "./user-manager";
 
 const parser = new XMLParser(
     {
@@ -18,7 +19,8 @@ export interface CCResponse {
 export const fetchStatus = async (configEntry: ConfigProps): Promise<CCResponse> => {
     const unknownStatus = responseOf(UNKNOWN, configEntry);
     try {
-        const response = await fetchFromServer(configEntry);
+        const credentials = await getCredentials();
+        const response = await fetchFromServer(configEntry, credentials);
         const data = await response.text();
 
         switch (response.status) {
@@ -36,10 +38,10 @@ export const fetchStatus = async (configEntry: ConfigProps): Promise<CCResponse>
 
 }
 
-const fetchFromServer = async (configEntry: ConfigProps): Promise<Response> => {
+const fetchFromServer = async (configEntry: ConfigProps, credentials: string): Promise<Response> => {
     if(configEntry.authRequired) {
         const headers = new Headers();
-        headers.append('Authorization', 'Basic ' + Buffer.from(`${process.env.UN}:${process.env.PW}`).toString('base64'));
+        headers.append('Authorization', 'Basic ' + Buffer.from(credentials).toString('base64'));
 
         return fetch(configEntry.url, {
             method:'GET',
