@@ -5,6 +5,7 @@ A cross-platform client which translates [CCTray Specification](https://cctray.o
 ## preconditions
 
 * For development and local usage, this project requires node >=18 and yarn.
+* Find the `config.json` by click on `get config path` in the menu
 * Configure your server urls in the `config.json` like shown below:
 
 ```json
@@ -29,10 +30,12 @@ yarn install
 
 # run the app
 yarn start
-
-# Run with Basic Auth
-UN='your_username' PW='your_password' yarn start
 ```
+
+## run with Basic Auth
+* put the credentials to the clipboard in format "username:password" 
+* press `get credentials from clipboard` in the menu.
+
 
 ## some additional notes
 
