@@ -19,13 +19,13 @@ jobs:
         with:
           node-version: 20
 
-#      - name: build cctron
-#        run: |
-#          yarn install
-#          yarn build
-#
-#      - name: release cctron
-#        uses: paneron/action-electron-builder@v1.8.1
-#        with:
-#          github_token: ${{ secrets.github_token }}
-#          release: true
+      - name: build cctron
+        run: |
+          yarn install
+          yarn build
+
+      - name: release cctron
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          release: true
