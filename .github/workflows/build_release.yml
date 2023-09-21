@@ -1,0 +1,18 @@
+name: build/release
+
+on: push
+
+jobs:
+  release:
+
+    steps:
+      - name: check out repo
+        uses: actions/checkout@v4
+
+      - name: install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: build cctron
+        run: yarn build
