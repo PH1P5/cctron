@@ -4,6 +4,11 @@ on: push
 
 jobs:
   release:
+    runs-on: ubuntu-latest # ${{ matrix.os }}
+
+    #strategy:
+    #  matrix:
+    #    os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
       - name: check out repo
