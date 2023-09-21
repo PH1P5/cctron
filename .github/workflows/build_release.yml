@@ -23,3 +23,9 @@ jobs:
         run: |
           yarn install
           yarn build
+
+      - name: Build/release Electron app
+        uses: paneron/action-electron-builder@v1.8.1
+        with:
+          github_token: ${{ secrets.github_token }}
+          release: true
