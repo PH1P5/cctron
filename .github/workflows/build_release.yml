@@ -24,8 +24,8 @@ jobs:
           yarn install
           yarn build
 
-      - name: release cctron
-        uses: samuelmeuli/action-electron-builder@v1
-        with:
-          github_token: ${{ secrets.github_token }}
-          release: true
+#      - name: release cctron
+#        uses: samuelmeuli/action-electron-builder@v1
+#        with:
+#          github_token: ${{ secrets.github_token }}
+#          release: true
