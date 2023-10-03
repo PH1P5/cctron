@@ -25,4 +25,4 @@ jobs:
           yarn build
 
       - name: bundle cctron
-        run: yarn electron-builder -ml
+        run: yarn electron-builder -ml -p never
