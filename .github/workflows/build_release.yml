@@ -26,3 +26,9 @@ jobs:
 
       - name: bundle cctron
         run: yarn electron-builder -ml -p never
+
+      - name: upload mac artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: cctron_mac
+          path: dist/*.dmg
