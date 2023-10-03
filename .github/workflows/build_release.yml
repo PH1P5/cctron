@@ -20,7 +20,7 @@ jobs:
           node-version: 20
 
       - name: build cctron
-        
+        run: |        
           yarn install
           yarn build
 
