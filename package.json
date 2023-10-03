@@ -14,14 +14,22 @@
     "files": [
       "dist/**/*",
       "package.json"
-    ]
+    ],
+    "linux":{
+      "target":[
+        "deb"
+      ]
+    }
   },
   "keywords": [
     "cctray",
     "Electron",
     "typescript"
   ],
-  "author": "Philipp Thomas",
+  "author": {
+    "name": "Philipp Thomas",
+    "email": "john@doe.com"
+  },
   "license": "MIT",
   "engines": {
     "node": ">=18"

@@ -32,3 +32,9 @@ jobs:
         with:
           name: cctron_mac
           path: dist/*.dmg
+
+      - name: upload linux artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: cctron_linux
+          path: dist/*.deb
