@@ -1,3 +1,5 @@
+[![build](https://github.com/PH1P5/cctron/actions/workflows/build_release.yml/badge.svg)](https://github.com/PH1P5/cctron/actions/workflows/build_release.yml)
+
 # cctron
 
 A cross-platform client which translates [CCTray Specification](https://cctray.org/v1/) into a great developer experience. It is powered by [Electron.js](https://www.electronjs.org/de/). 
