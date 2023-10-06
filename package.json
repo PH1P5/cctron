@@ -7,7 +7,7 @@
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "start": "yarn build && electron ./dist/main.js",
-    "package": "yarn electron-builder -ml"
+    "package": "yarn electron-builder -p never"
   },
   "main": "dist/main.js",
   "build": {

@@ -4,11 +4,16 @@ on: push
 
 jobs:
   release:
-    runs-on: macos-latest # ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
 
-    #strategy:
-    #  matrix:
-    #    os: [macos-latest, ubuntu-latest, windows-latest]
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+        include:
+          - os: macos-latest
+            package-path: dist/*.dmg
+          - os: ubuntu-latest
+            package-path: dist/*.deb
 
     steps:
       - name: check out repo
@@ -25,16 +30,9 @@ jobs:
           yarn build
 
       - name: bundle cctron
-        run: yarn electron-builder -ml -p never
+        run: yarn package
 
-      - name: upload mac artifact
+      - name: upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: cctron_mac
-          path: dist/*.dmg
-
-      - name: upload linux artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: cctron_linux
-          path: dist/*.deb
+          path: ${{ matrix.package-path }}
