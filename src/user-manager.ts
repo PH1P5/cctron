@@ -1,5 +1,6 @@
 import { app, safeStorage } from "electron";
 import * as keytar from 'keytar';
+import * as log from 'electron-log';
 
 const encoding = 'binary';
 
@@ -12,7 +13,7 @@ export const getCredentials = async (): Promise<string> => {
 
        return username + ':' + password;
    } catch (e) {
-       console.log('Cannot retrieve credentials from keychain.');
+       log.warn('Cannot retrieve credentials from keychain.', e);
    }
    return 'NN:NN';
 }
