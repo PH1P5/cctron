@@ -2,7 +2,7 @@ import { app, safeStorage } from "electron";
 import * as keytar from 'keytar';
 import * as log from 'electron-log';
 
-const encoding = 'binary';
+const encoding = 'base64';
 
 export const getCredentials = async (): Promise<string> => {
    try {
