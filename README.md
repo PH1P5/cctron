@@ -35,8 +35,8 @@ yarn start
 ```
 
 ## run with Basic Auth
-* put the credentials to the clipboard in format "username:password" 
-* press `get credentials from clipboard` in the menu.
+* put the credentials to the clipboard in this format (without the quotes) "username:password" 
+* press `retrieve credentials from clipboard` in the menu.
 
 
 ## some additional notes
