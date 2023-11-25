@@ -1,11 +1,11 @@
-import {app, shell, Notification, clipboard, safeStorage} from "electron";
+import { app, shell, Notification, clipboard, BrowserWindow } from "electron";
 import * as path from "path";
 import * as fs from 'fs';
 import MenuItemConstructorOptions = Electron.MenuItemConstructorOptions;
 
-import {CCResponse, fetchStatus} from "./cc-client";
-import {BUILDING, STATUS_ICONS} from "./tray-initialization";
-import {setCredentials} from "./user-manager";
+import { CCResponse, fetchStatus } from "./cc-client";
+import { BUILDING, STATUS_ICONS } from "./tray-initialization";
+import { setCredentials} from "./user-manager";
 
 interface CCTronMenuItem extends MenuItemConstructorOptions {
     status: string
@@ -64,6 +64,22 @@ const toCCTronMenuItem = (responses: CCResponse[]): Array<CCTronMenuItem> => {
     );
 }
 
+function openEditWindow() {
+    const window = new BrowserWindow({
+        webPreferences: {
+            nodeIntegration: true,
+            preload: path.join(__dirname, 'ipc/preload.js'),
+        }
+    });
+    window.loadFile('ipc/editor.html').then(() => {
+        console.log("window opened");
+    });
+    loadConfigFile().then((fileContent) => {
+        const jsonString = fileContent.toString();
+        window.webContents.send('inject-config', jsonString);
+    })
+}
+
 const staticMenuItems = (): Array<MenuItemConstructorOptions> => {
     return [
         {
@@ -74,7 +90,11 @@ const staticMenuItems = (): Array<MenuItemConstructorOptions> => {
             label: 'get config path',
             toolTip: 'find config here: ' + app.getPath('userData'),
             type: 'normal', click: (menuItem, browserWindow, keyBoardEvent) => {
-                clipboard.writeText(app.getPath('userData') + '/' + 'config.json')
+                const configFile = app.getPath('userData') + '/' + 'config.json';
+                clipboard.writeText(configFile);
+
+                openEditWindow();
+
                 new Notification({
                     title: "Config Path",
                     body: "Copied config path to clipboard."

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A cross-platform client which understands cctray xml spec",
   "scripts": {
-    "build": "tsc && copyfiles assets/* dist && copyfiles config.json dist/",
+    "build": "tsc && copyfiles assets/* dist && copyfiles config.json dist/ && copyfiles -u 1 src/ipc/* dist",
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "start": "yarn build && electron ./dist/main.js",
