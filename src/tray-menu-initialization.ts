@@ -74,10 +74,17 @@ function openEditWindow() {
     window.loadFile('ipc/editor.html').then(() => {
         console.log("window opened");
     });
-    loadConfigFile().then((fileContent) => {
-        const jsonString = fileContent.toString();
-        window.webContents.send('inject-config', jsonString);
-    })
+    window.webContents.once('dom-ready', () => {
+        loadConfigFile().then((fileContent) => {
+            const jsonString = fileContent.toString();
+            window.webContents.send('inject-config', jsonString);
+        });
+    });
+
+    window.on('close', event => {
+        event.preventDefault();
+        window.destroy();
+    });
 }
 
 const staticMenuItems = (): Array<MenuItemConstructorOptions> => {
