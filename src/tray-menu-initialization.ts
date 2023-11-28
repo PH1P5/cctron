@@ -66,10 +66,11 @@ const toCCTronMenuItem = (responses: CCResponse[]): Array<CCTronMenuItem> => {
 
 function openEditWindow() {
     const window = new BrowserWindow({
+        title: "config editor",
         webPreferences: {
             nodeIntegration: true,
             preload: path.join(__dirname, 'ipc/preload.js'),
-        }
+        },
     });
     window.loadFile('ipc/editor.html').then(() => {
         console.log("window opened");
@@ -94,7 +95,7 @@ const staticMenuItems = (): Array<MenuItemConstructorOptions> => {
             type: 'separator'
         },
         {
-            label: 'get config path',
+            label: 'open config editor',
             toolTip: 'find config here: ' + app.getPath('userData'),
             type: 'normal', click: (menuItem, browserWindow, keyBoardEvent) => {
                 const configFile = app.getPath('userData') + '/' + 'config.json';
