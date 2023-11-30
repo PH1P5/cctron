@@ -1,6 +1,11 @@
 
 
-const json = document.getElementById('json')
+const editTextrea = document.querySelector('.json-editor');
 window.cctronIpcApi.injectConfig((event, value) => {
-    json.innerHTML = value;
+    editTextrea.innerHTML = value;
+});
+
+const saveButton = document.querySelector('.save-btn');
+saveButton.addEventListener('click', async () => {
+    await window.cctronIpcApi.saveConfig(editTextrea.value);
 });

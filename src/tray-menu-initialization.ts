@@ -1,4 +1,4 @@
-import { app, shell, Notification, clipboard, BrowserWindow } from "electron";
+import { app, shell, Notification, clipboard, BrowserWindow, ipcMain } from "electron";
 import * as path from "path";
 import * as fs from 'fs';
 import MenuItemConstructorOptions = Electron.MenuItemConstructorOptions;
@@ -72,6 +72,11 @@ function openEditWindow() {
             preload: path.join(__dirname, 'ipc/preload.js'),
         },
     });
+
+    ipcMain.handle('save-config', async (event, config) => {
+        console.log(config);
+    });
+
     window.loadFile('ipc/editor.html').then(() => {
         console.log("window opened");
     });
