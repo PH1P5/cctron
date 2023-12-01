@@ -1,11 +1,11 @@
-import { app, shell, Notification, clipboard, BrowserWindow, ipcMain } from "electron";
+import {app, BrowserWindow, clipboard, ipcMain, Notification, shell} from "electron";
 import * as path from "path";
-import * as fs from 'fs';
-import MenuItemConstructorOptions = Electron.MenuItemConstructorOptions;
 
-import { CCResponse, fetchStatus } from "./cc-client";
-import { BUILDING, STATUS_ICONS } from "./tray-initialization";
-import { setCredentials} from "./user-manager";
+import {CCResponse, fetchStatus} from "./cc-client";
+import {BUILDING, STATUS_ICONS} from "./tray-initialization";
+import {setCredentials} from "./user-manager";
+import {loadConfigFile, saveConfigFile} from "./config-io";
+import MenuItemConstructorOptions = Electron.MenuItemConstructorOptions;
 
 interface CCTronMenuItem extends MenuItemConstructorOptions {
     status: string
@@ -30,21 +30,6 @@ export const initMenuItems = async (): Promise<Array<CCTronMenuItem | MenuItemCo
     return [...toCCTronMenuItem(responses), ...staticMenuItems()];
 }
 
-const loadConfigFile = async (): Promise<Buffer> => {
-    const targetConfigFilePath = app.getPath('userData') + '/config.json';
-    const defaultConfigFilePath = path.join(__dirname, 'config.json');
-
-    try {
-        return await fs.promises.readFile(targetConfigFilePath);
-    } catch {
-        console.log('No config file found, initialisation follows.');
-    }
-
-    await fs.promises.copyFile(defaultConfigFilePath, targetConfigFilePath);
-
-    return await fs.promises.readFile(targetConfigFilePath);
-}
-
 const toCCTronMenuItem = (responses: CCResponse[]): Array<CCTronMenuItem> => {
     return responses.map(jsonResponse => {
             const currentStatus = jsonResponse.activity == BUILDING ? jsonResponse.activity : jsonResponse.lastStatus
@@ -64,35 +49,6 @@ const toCCTronMenuItem = (responses: CCResponse[]): Array<CCTronMenuItem> => {
     );
 }
 
-function openEditWindow() {
-    const window = new BrowserWindow({
-        title: "config editor",
-        webPreferences: {
-            nodeIntegration: true,
-            preload: path.join(__dirname, 'ipc/preload.js'),
-        },
-    });
-
-    ipcMain.handle('save-config', async (event, config) => {
-        console.log(config);
-    });
-
-    window.loadFile('ipc/editor.html').then(() => {
-        console.log("window opened");
-    });
-    window.webContents.once('dom-ready', () => {
-        loadConfigFile().then((fileContent) => {
-            const jsonString = fileContent.toString();
-            window.webContents.send('inject-config', jsonString);
-        });
-    });
-
-    window.on('close', event => {
-        event.preventDefault();
-        window.destroy();
-    });
-}
-
 const staticMenuItems = (): Array<MenuItemConstructorOptions> => {
     return [
         {
@@ -103,15 +59,7 @@ const staticMenuItems = (): Array<MenuItemConstructorOptions> => {
             label: 'open config editor',
             toolTip: 'find config here: ' + app.getPath('userData'),
             type: 'normal', click: (menuItem, browserWindow, keyBoardEvent) => {
-                const configFile = app.getPath('userData') + '/' + 'config.json';
-                clipboard.writeText(configFile);
-
-                openEditWindow();
-
-                new Notification({
-                    title: "Config Path",
-                    body: "Copied config path to clipboard."
-                }).show()
+                openEditorWindow();
             }
         },
         {
@@ -135,8 +83,42 @@ const staticMenuItems = (): Array<MenuItemConstructorOptions> => {
         {
             label: 'quit',
             type: 'normal', click: (menuItem, browserWindow, keyBoardEvent) => {
-                app.quit()
+                app.exit();
             }
         }
     ]
+}
+
+const openEditorWindow = () => {
+    const window = new BrowserWindow({
+        title: "config editor",
+        webPreferences: {
+            nodeIntegration: true,
+            preload: path.join(__dirname, 'ipc/preload.js'),
+        },
+        width: 1024,
+    });
+    ipcMain.removeHandler('save-config');
+    ipcMain.handle('save-config', async (event, config) => {
+        saveConfigFile(config)
+            .then(() => {
+                window.close();
+                new Notification({ title: "Success", body: "The config.json has been updated." }).show()
+            })
+            .catch((reason) => {
+                new Notification({ title: "Error", body: "...writing config file." }).show()
+            });
+    });
+
+    window.loadFile('ipc/editor.html').then(() => {
+        loadConfigFile().then((fileContent) => {
+            const jsonString = fileContent.toString();
+            window.webContents.send('inject-config', jsonString);
+        });
+    });
+
+    window.on('close', (event: CustomEvent) => {
+        event.preventDefault();
+        window.hide();
+    });
 }
