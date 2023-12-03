@@ -64,7 +64,7 @@ const staticMenuItems = (): Array<MenuItemConstructorOptions> => {
             }
         },
         {
-            label: 'get credentials from clipboard',
+            label: 'retrieve credentials from clipboard',
             toolTip: 'use format "username:password"',
             type: 'normal', click: (menuItem, browserWindow, keyBoardEvent) => {
                 const fromClipboard = clipboard.readText();
