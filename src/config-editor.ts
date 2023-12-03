@@ -18,7 +18,7 @@ const initializeEditorWindow = (): BrowserWindow  => {
         width: 1024,
     });
 
-    window.loadFile('ipc/editor.html').then(() => {
+    window.loadFile(path.join(__dirname, 'ipc/editor.html')).then(() => {
         loadConfigFile().then((fileContent) => {
             const jsonString = fileContent.toString();
             window.webContents.send('inject-config', jsonString);

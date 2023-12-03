@@ -5,7 +5,7 @@ import {CCResponse, fetchStatus} from "./cc-client";
 import {BUILDING, STATUS_ICONS} from "./tray-initialization";
 import {setCredentials} from "./user-manager";
 import {loadConfigFile} from "./config-io";
-import {openEditorWindow} from "./condig-editor";
+import {openEditorWindow} from "./config-editor";
 import MenuItemConstructorOptions = Electron.MenuItemConstructorOptions;
 
 interface CCTronMenuItem extends MenuItemConstructorOptions {
