@@ -1,10 +1,11 @@
-import {app, BrowserWindow, clipboard, ipcMain, Notification, shell} from "electron";
+import {app, clipboard, Notification, shell} from "electron";
 import * as path from "path";
 
 import {CCResponse, fetchStatus} from "./cc-client";
 import {BUILDING, STATUS_ICONS} from "./tray-initialization";
 import {setCredentials} from "./user-manager";
-import {loadConfigFile, saveConfigFile} from "./config-io";
+import {loadConfigFile} from "./config-io";
+import {openEditorWindow} from "./condig-editor";
 import MenuItemConstructorOptions = Electron.MenuItemConstructorOptions;
 
 interface CCTronMenuItem extends MenuItemConstructorOptions {
@@ -89,36 +90,3 @@ const staticMenuItems = (): Array<MenuItemConstructorOptions> => {
     ]
 }
 
-const openEditorWindow = () => {
-    const window = new BrowserWindow({
-        title: "config editor",
-        webPreferences: {
-            nodeIntegration: true,
-            preload: path.join(__dirname, 'ipc/preload.js'),
-        },
-        width: 1024,
-    });
-    ipcMain.removeHandler('save-config');
-    ipcMain.handle('save-config', async (event, config) => {
-        saveConfigFile(config)
-            .then(() => {
-                window.close();
-                new Notification({ title: "Success", body: "The config.json has been updated." }).show()
-            })
-            .catch((reason) => {
-                new Notification({ title: "Error", body: "...writing config file." }).show()
-            });
-    });
-
-    window.loadFile('ipc/editor.html').then(() => {
-        loadConfigFile().then((fileContent) => {
-            const jsonString = fileContent.toString();
-            window.webContents.send('inject-config', jsonString);
-        });
-    });
-
-    window.on('close', (event: CustomEvent) => {
-        event.preventDefault();
-        window.hide();
-    });
-}
