@@ -1,4 +1,4 @@
-import {BrowserWindow, ipcMain, Notification} from "electron";
+import {BrowserWindow, ipcMain, Notification, dialog} from "electron";
 import * as path from "path";
 import {loadConfigFile, saveConfigFile} from "./config-io";
 
@@ -31,15 +31,28 @@ const initializeEditorWindow = (): BrowserWindow  => {
 const initializeRendererEventListener = (window: Electron.CrossProcessExports.BrowserWindow) =>{
     ipcMain.removeHandler('save-config');
     ipcMain.handle('save-config', async (event, config) => {
+        if(!isValidJson(config)) {
+            dialog.showErrorBox('Error!', "The configuration is not a valid JSON!");
+            return
+        }
         saveConfigFile(config)
             .then(() => {
                 window.close();
                 new Notification({title: "Success", body: "The config.json has been updated."}).show()
             })
             .catch((reason) => {
-                new Notification({title: "Error", body: "...writing config file."}).show()
+                dialog.showErrorBox('Error!', "Cannot write config file!");
             });
     });
+}
+
+const isValidJson = (json: string) => {
+    try{
+        JSON.parse(json);
+    }catch (e){
+        return false;
+    }
+    return true;
 }
 
 const avoidQuitOnCloseEvent = (window: BrowserWindow) => {
