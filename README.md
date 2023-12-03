@@ -7,8 +7,8 @@ A cross-platform client which translates [CCTray Specification](https://cctray.o
 ## preconditions
 
 * For development and local usage, this project requires node >=18 and yarn.
-* Find the `config.json` by click on `get config path` in the menu
-* Configure your server urls in the `config.json` like shown below:
+* Configure your server by clicking `open config editor` in the menu
+* Example config.json:
 
 ```json
 [
