@@ -15,12 +15,17 @@
       "dist/**/*",
       "package.json"
     ],
+    "mac": {
+      "icon": "assets/icon.icns"
+    },
     "linux": {
       "target": [
         "deb"
-      ]
+      ],
+      "icon": "assets/icon.icns"
     }
   },
+
   "keywords": [
     "cctray",
     "Electron",
