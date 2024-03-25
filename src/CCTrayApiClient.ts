@@ -2,6 +2,7 @@ import { XMLParser } from "fast-xml-parser";
 
 import {ConfigProps, LOCKED, UNKNOWN} from "./CCTronTray";
 import {UserCredentialsRepository} from "./UserCredentialsRepository";
+import {injectable} from "tsyringe";
 
 const parser = new XMLParser(
     {
@@ -15,11 +16,11 @@ export interface CCResponse {
     activity?: string,
     url?: string
 }
-
+@injectable()
 export class CCTrayApiClient {
     userCredentialsRepository: UserCredentialsRepository;
-    constructor() {
-        this.userCredentialsRepository = new UserCredentialsRepository()
+    constructor(userCredentialsRepository: UserCredentialsRepository) {
+        this.userCredentialsRepository = userCredentialsRepository;
     }
     fetchStatus = async (configEntry: ConfigProps): Promise<CCResponse> => {
         const unknownStatus = this.responseOf(UNKNOWN, configEntry);

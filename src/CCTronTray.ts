@@ -3,6 +3,7 @@ import * as path from "path";
 import MenuItemConstructorOptions = Electron.MenuItemConstructorOptions;
 
 import {CCTronTrayMenu} from "./CCTronTrayMenu";
+import {injectable} from "tsyringe";
 
 // TODO put all these icon constants into one place
 const SUCCESS = "Success";
@@ -36,11 +37,12 @@ interface TrayProps {
 
 let tray: Tray = undefined
 
+@injectable()
 export class CCTronTray {
     ccTronTrayMenu: CCTronTrayMenu;
 
-    constructor() {
-        this.ccTronTrayMenu = new CCTronTrayMenu()
+    constructor(ccTronTrayMenu: CCTronTrayMenu) {
+        this.ccTronTrayMenu = ccTronTrayMenu;
     }
 
     build = () => {

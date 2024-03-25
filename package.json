@@ -25,7 +25,6 @@
       "icon": "assets/icon.icns"
     }
   },
-
   "keywords": [
     "cctray",
     "Electron",
@@ -51,6 +50,8 @@
   "dependencies": {
     "electron-log": "^4.4.8",
     "fast-xml-parser": "^4.2.2",
-    "keytar": "^7.9.0"
+    "keytar": "^7.9.0",
+    "reflect-metadata": "^0.2.1",
+    "tsyringe": "^4.8.0"
   }
 }

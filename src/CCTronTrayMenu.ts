@@ -7,6 +7,7 @@ import {ConfigFileManager} from "./ConfigFileManager";
 import MenuItemConstructorOptions = Electron.MenuItemConstructorOptions;
 import {UserCredentialsRepository} from "./UserCredentialsRepository";
 import {ConfigEditorWindow} from "./ConfigEditorWindow";
+import {injectable} from "tsyringe";
 
 interface CCTronMenuItem extends MenuItemConstructorOptions {
     status: string
@@ -17,6 +18,7 @@ interface ConfigEntry {
     authRequired: boolean
 }
 
+@injectable()
 export class CCTronTrayMenu {
 
     ccTrayApiClient: CCTrayApiClient;
@@ -24,11 +26,16 @@ export class CCTronTrayMenu {
     configFileManager: ConfigFileManager;
     configEditorWindow: ConfigEditorWindow;
 
-    constructor() {
-        this.userCredentialsRepository = new UserCredentialsRepository();
-        this.ccTrayApiClient = new CCTrayApiClient();
-        this.configFileManager = new ConfigFileManager();
-        this.configEditorWindow = new ConfigEditorWindow();
+    constructor(
+        ccTrayApiClient: CCTrayApiClient,
+        userCredentialsRepository: UserCredentialsRepository,
+        configFileManager: ConfigFileManager,
+        configEditorWindow: ConfigEditorWindow,
+    ) {
+        this.userCredentialsRepository = userCredentialsRepository;
+        this.ccTrayApiClient = ccTrayApiClient;
+        this.configFileManager = configFileManager;
+        this.configEditorWindow = configEditorWindow;
     }
 
     initMenu = async (): Promise<Array<CCTronMenuItem | MenuItemConstructorOptions>> => {

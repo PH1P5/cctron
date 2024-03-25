@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    // tsyringe
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
     "module": "commonjs",
     "target": "ES2020",
     "lib": [

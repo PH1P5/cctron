@@ -1,13 +1,15 @@
 import {BrowserWindow, ipcMain, Notification, dialog} from "electron";
 import * as path from "path";
 import {ConfigFileManager} from "./ConfigFileManager";
+import {injectable} from "tsyringe";
 
+@injectable()
 export class ConfigEditorWindow {
 
     configFileManager: ConfigFileManager;
 
-    constructor() {
-        this.configFileManager = new ConfigFileManager();
+    constructor(configFileManager: ConfigFileManager) {
+        this.configFileManager = configFileManager;
     }
 
     open = () => {
