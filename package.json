@@ -17,13 +17,15 @@
       "package.json"
     ],
     "mac": {
-      "icon": "assets/icon.icns"
+      "icon": "assets/icon.icns",
+      "artifactName": "${productName}.${ext}"
     },
     "linux": {
       "target": [
         "deb"
       ],
-      "icon": "assets/icon.icns"
+      "icon": "assets/icon.icns",
+      "artifactName": "${productName}.${ext}"
     }
   },
   "keywords": [
