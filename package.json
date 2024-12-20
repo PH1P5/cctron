@@ -1,6 +1,6 @@
 {
   "name": "cctron",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A cross-platform client which understands cctray xml spec",
   "scripts": {
     "build": "tsc && copyfiles assets/* dist && copyfiles config.json dist/ && copyfiles -u 1 src/ipc/* dist",
