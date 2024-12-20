@@ -6,6 +6,14 @@ module.exports = {
         ["@semantic-release/git", {
             "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
         }],
-        '@semantic-release/github'
+        [
+            "@semantic-release/github",
+            {
+                "assets": [
+                    { "path": "artifacts/*.dmg", "label": "cctron for macos" },
+                    { "path": "artifacts/*.deb", "label": "cctron for linux" }
+                ]
+            }
+        ]
     ]
 };
