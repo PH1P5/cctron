@@ -65,9 +65,6 @@ jobs:
           merge-multiple: true
           path: artifacts
 
-      - name: Display structure of downloaded files
-        run: ls -R artifacts
-
       - name: create release
         run: |
           yarn install
