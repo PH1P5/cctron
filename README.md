@@ -6,7 +6,7 @@ A cross-platform client which translates [CCTray Specification](https://cctray.o
 
 ## preconditions
 
-* For development and local usage, this project requires node >=18 and yarn.
+* For development and local usage, this project requires node >=18.
 * Configure your server by clicking `open config editor` in the menu
 * Example config.json:
 
@@ -28,10 +28,10 @@ A cross-platform client which translates [CCTray Specification](https://cctray.o
 
 ```bash
 # install dependencies
-yarn install
+npm install
 
 # run the app
-yarn start
+npm run start
 ```
 
 ## run with Basic Auth

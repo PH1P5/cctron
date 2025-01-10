@@ -31,11 +31,11 @@ jobs:
 
       - name: build cctron
         run: |        
-          yarn install
-          yarn build
+          npm install
+          npm run build
 
       - name: bundle cctron
-        run: yarn package
+        run: npm run package
 
       - name: upload artifact
         uses: actions/upload-artifact@v4
@@ -67,7 +67,7 @@ jobs:
 
       - name: create release
         run: |
-          yarn install
+          npm install
           npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

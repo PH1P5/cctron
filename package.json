@@ -7,8 +7,8 @@
     "build": "tsc && copyfiles assets/* dist && copyfiles config.json dist/ && copyfiles -u 1 src/ipc/* dist",
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
-    "start": "yarn build && electron ./dist/main.js",
-    "package": "yarn electron-builder -p never"
+    "start": "npm run build && electron ./dist/main.js",
+    "package": "npm run electron-builder -p never"
   },
   "main": "dist/main.js",
   "build": {
