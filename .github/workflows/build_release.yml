@@ -13,9 +13,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-15-large, ubuntu-latest]
+        os: [macos-14, ubuntu-latest]
         include:
-          - os: macos-15-large
+          - os: macos-14
             package-path: dist/*.dmg
           - os: ubuntu-latest
             package-path: dist/*.deb
