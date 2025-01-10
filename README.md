@@ -46,3 +46,7 @@ npm run start
   * no configuration ui
   * ...
 * more documentation may follow
+
+## logs
+* find the logs in the app-path [directory](https://www.electronjs.org/docs/latest/api/app#appgetpathname)
+

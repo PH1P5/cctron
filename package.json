@@ -8,7 +8,7 @@
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "start": "npm run build && electron ./dist/main.js",
-    "package": "npm run electron-builder -p never"
+    "package": "electron-builder -p never"
   },
   "main": "dist/main.js",
   "build": {
@@ -47,14 +47,14 @@
     "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.59.1",
     "copyfiles": "^2.4.1",
-    "electron": "^24.1.2",
-    "electron-builder": "^24.6.3",
+    "electron": "^33.3.1",
+    "electron-builder": "^25.1.8",
     "eslint": "^8.39.0",
     "semantic-release": "^24.2.0",
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "electron-log": "^4.4.8",
+    "electron-log": "^5.2.4",
     "fast-xml-parser": "^4.2.2",
     "keytar": "^7.9.0",
     "reflect-metadata": "^0.2.1",
