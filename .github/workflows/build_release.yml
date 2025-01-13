@@ -15,9 +15,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-13, ubuntu-latest]
+        os: [macos-13, macos-latest, ubuntu-latest]
         include:
           - os: macos-13
+            package-path: dist/*.dmg
+          - os: macos-latest
             package-path: dist/*.dmg
           - os: ubuntu-latest
             package-path: dist/*.deb
@@ -38,10 +40,6 @@ jobs:
 
       - name: bundle cctron
         run: npm run package
-
-      - name: Display structure of downloaded files
-        run: ls -R dist
-
 
       - name: upload artifact
         uses: actions/upload-artifact@v4

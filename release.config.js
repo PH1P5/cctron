@@ -15,7 +15,8 @@ module.exports = {
         ["@semantic-release/github",
             {
                 "assets": [
-                    { "path": "artifacts/*.dmg", "label": "cctron for macos" },
+                    { "path": "artifacts/*_x64.dmg", "label": "cctron x64 for macos" },
+                    { "path": "artifacts/*_arm64.dmg", "label": "cctron x64 for macos" },
                     { "path": "artifacts/*.deb", "label": "cctron for linux" }
                 ]
             }
