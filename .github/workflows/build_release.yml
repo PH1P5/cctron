@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - ".github/test_dry_run_releases.yml"
 
   workflow_dispatch:
 

@@ -1,0 +1,30 @@
+name: test_release
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  test release:
+    needs: build
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: create release
+        run: |
+          npm install
+          npx semantic-release --dry-run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: print package.json content
+        run: cat package.json
