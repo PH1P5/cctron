@@ -24,6 +24,10 @@ jobs:
           npx semantic-release --dry-run
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: nextRelease
+
+      - name: update package.json
+        run: npm version ${{ steps.nextRelease.outputs.releaseType }}
 
       - name: print package.json content
         run: cat package.json
