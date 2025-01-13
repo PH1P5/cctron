@@ -39,6 +39,10 @@ jobs:
       - name: bundle cctron
         run: npm run package
 
+      - name: Display structure of downloaded files
+        run: ls -R dist
+
+
       - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
