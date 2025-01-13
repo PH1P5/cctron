@@ -5,7 +5,7 @@ on:
 
 
 jobs:
-  test release:
+  test_release:
     needs: build
     permissions:
       contents: write
