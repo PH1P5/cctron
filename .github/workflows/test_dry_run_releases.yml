@@ -27,7 +27,7 @@ jobs:
         id: nextRelease
 
       - name: update package.json
-        run: npm version ${{ steps.nextRelease.outputs.releaseType }}
+        run: npm version ${{ steps.nextRelease.outputs.releaseType }} --no-git-tag-version
 
       - name: print package.json content
         run: cat package.json
