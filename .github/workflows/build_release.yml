@@ -33,6 +33,17 @@ jobs:
         with:
           node-version: 20
 
+      - name: get next release version
+        run: |
+          npm install
+          npx semantic-release --dry-run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: nextRelease
+
+      - name: prepare version in package.json
+        run: npm version ${{ steps.nextRelease.outputs.releaseType }} --no-git-tag-version
+
       - name: build cctron
         run: |        
           npm install
